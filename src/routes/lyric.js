@@ -11,8 +11,13 @@ router.get("/", function (req, res) {
     var url = 'https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?apikey=c39d3ce1436ee73e524a1774bf47bdc8&q_track='+music;
     url = (artist!=null)?url+'&q_artist='+artist:url;
     request(url, { json: true }, (err, res_int, body) => {        
-    if (err) { res.send(err); }
-        res.send(body.message.body.lyrics.lyrics_body);
+    if (err) { return console.error(err); }
+        if(body.message.body.lyrics==null)
+        {
+            res.send("{ \"erro\":\"Nenhuma letra encontrada\"}")
+        } else {
+            res.send(body.message.body.lyrics.lyrics_body);
+        }
     });    
 })
 
