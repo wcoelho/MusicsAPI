@@ -5,7 +5,7 @@ const router = express()
 
 router.get("/", function (req, res) {
     const token = req.query["token"];
-    const music = req.query["musica"];
+    const music = req.query["titulo"];
     const artist = req.query["artista"];
 
     var url = "https://api.spotify.com/v1/search?q="+music+"&type=track";
