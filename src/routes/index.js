@@ -14,4 +14,6 @@ router.use(`${api_prefix}/musicas`, musicRoute);
 router.use(`${api_prefix}/artistas`, artistRoute);
 router.use(`${api_prefix}/letras`, lyricRoute);
 
-module.exports = router;
+module.exports = function(app, db) {
+    artistRoute(app, db);
+};
