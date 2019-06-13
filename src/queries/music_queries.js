@@ -17,7 +17,7 @@ class MusicQueries {
     }
 
     // Registra um novo música
-    create(titulo, música, idMusica) {
+    create(titulo, idArtista, idLetra) {
         return this.dao.run(
           `INSERT INTO musicas (titulo, idArtista, idLetra)
             VALUES (?, ?, ?)`,
@@ -25,7 +25,7 @@ class MusicQueries {
     }
 
     // Atualiza os dados de um música
-    update(id, titulo, música, idMusica) {
+    update(id, titulo, idArtista, idLetra) {
         return this.dao.run(
           `UPDATE musicas SET titulo = ?, idArtista = ?, idLetra = ? WHERE id = ?`,
           [titulo, idArtista, idLetra, id]
@@ -47,9 +47,16 @@ class MusicQueries {
           [id])
     }
 
+    // Recupera informação de um música a partir de nome 
+    getByName(name) {
+      return this.dao.get(
+        `SELECT * FROM musicas WHERE titulo = ?`,
+        [name])
+    }
+
     // Recupera lista de todos músicas
     getAll() {
-        return this.dao.all(`SELECT * FROM musics`)
+      return this.dao.all(`SELECT * FROM musics`)
     }
 }
   

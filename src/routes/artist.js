@@ -4,18 +4,18 @@ const cors = require('cors');
 let queries;
 
 module.exports = function(app, dao) {
-    const baseURL = "/api/v1/artistas"
-    queries = new ArtistQueries(dao)
+    const baseURL = "/api/v1/artistas";
+    queries = new ArtistQueries(dao);
 
     // Rota para adição de artistas
     app.post(baseURL, cors(), (req, res) => {
         // As informações do artista serão armazenadas no banco de dados
-        const { nome, pais } = getArtistData(req)
+        const { nome, pais } = getArtistData(req);
         queries.create(nome, pais)
         .then((data) => { // Se a operação de criação for bem sucedida, retorna os dados com o id
-        let artista = req.body
-        artista.id = data.id
-        res.status(201).send(artista)
+        let artista = req.body;
+        artista.id = data.id;
+        res.status(201).send(artista);
         })    
     });
 
@@ -24,10 +24,10 @@ module.exports = function(app, dao) {
         // Verifica a consistência entre os ids do corpo da mensagem e do parâmetro
         if(req.params.id!=req.body.id)
         {
-            res.status(500).json({erro: 'Ocorreu um erro em sua requisição. Consulte o administrador.'})
+            res.status(500).json({erro: 'Ocorreu um erro em sua requisição. Consulte o administrador.'});
         } else {
             // As informações do artista serão atualizadas no banco de dados
-            const { nome, pais } = getArtistData(req)
+            const { nome, pais } = getArtistData(req);
             const id = req.params.id;
             queries.update(id, nome, pais);
 

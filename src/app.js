@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const LyricQueries = require('./queries/lyric_queries') 
 const MusicQueries = require('./queries/music_queries') 
 const ArtistQueries = require('./queries/artist_queries') 
+const PlaylistQueries = require('./queries/playlist_queries') 
 const CommonDAO = require('./dao/common_dao')
 
 let app = express();
@@ -19,18 +20,22 @@ app.use(bodyParser.json())
 // Cria o banco de dados, caso não exista, e recebe a conexão
 const dao = new CommonDAO('database.sqlite3')
 
+const apis = ['music', 'artist', 'lyric', 'playlist'];
+
 // Inicializando as rotas com o app e o dao
-require('./routes')(app, dao);
+apis.forEach(initializeRoutes);
 
 // Inicializa a conexão nas classes de queries
 const lyricQueries = new LyricQueries(dao)
 const musicQueries = new MusicQueries(dao)
 const artistQueries = new ArtistQueries(dao)
+const playlistQueries = new PlaylistQueries(dao)
 
 // Cria as tabelas, caso não existam
 lyricQueries.createTable()
 musicQueries.createTable()
 artistQueries.createTable()
+playlistQueries.createTable();
 
 // Sobe a aplicação
 const server = app.listen(port, () => {
@@ -47,6 +52,11 @@ const server = app.listen(port, () => {
 process.on('exit', function(code) {
     console.info("Aplicação encerrada.");
 });
+
+function initializeRoutes(element)
+{
+  require(`./routes/index_${element}`)(app, dao);
+}
 
 function executeOnExit(signal) {
   console.info(`Sinal ${signal} recebido`);

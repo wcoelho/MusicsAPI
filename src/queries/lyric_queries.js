@@ -16,7 +16,7 @@ class LyricQueries {
     }
 
     // Registra um novo letra
-    create(titulo, letra, idMusica) {
+    create(titulo, letra) {
         return this.dao.run(
           `INSERT INTO letras (titulo, letra)
             VALUES (?, ?)`,
@@ -24,7 +24,7 @@ class LyricQueries {
     }
 
     // Atualiza os dados de um letra
-    update(id, titulo, letra, idMusica) {
+    update(id, titulo, letra) {
         return this.dao.run(
           `UPDATE letras SET titulo = ?, letra = ? WHERE id = ?`,
           [titulo, letra, id]
@@ -45,6 +45,11 @@ class LyricQueries {
           `SELECT * FROM letras WHERE id = ?`,
           [id])
     }
+
+    getByLyric(lyric) {
+      return this.dao.get(
+        `SELECT * FROM letras WHERE letra like '%${lyric}%'`)
+  }
 
     // Recupera lista de todos letras
     getAll() {
