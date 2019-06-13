@@ -4,9 +4,12 @@ const MusicQueries = require('../queries/music_queries');
 const ArtistQueries = require('../queries/artist_queries');
 const cors = require('cors');
 
+const circuitBreaker = require('opossum');
+const client = require('roi');
+
+const circuit = circuitBreaker(client.get);
+
 let queries;
-let artistQueries;
-let mmusicQueries;
 
 module.exports = function(app, dao) {
     const baseURL = "/api/v1/letras"
@@ -53,27 +56,19 @@ module.exports = function(app, dao) {
         if(music==null) { 
             getAll(res); 
         } else {
-        
+
             var url = 'https://api.musixmatch.com/ws/1.1/matcher.lyrics.get?apikey=c39d3ce1436ee73e524a1774bf47bdc8&q_track='+music;
             url = (artist!=null)?url+'&q_artist='+artist:url;
-            request(url, { json: true }, (err, res_int, body) => {        
-            if (err) { return console.error(err); }
-                if(body.message.body.lyrics==null)
-                {
-                    res.send({ erro: 'Nenhuma letra encontrada' });
-                } else {
-                    const fromLyric = body.message.body.lyrics.lyrics_body;
-                    console.log(`Salvando letra para titulo '${music}'`)
-                    queries.create(music, fromLyric);
-                    res.send({letra: fromLyric});            
-                }
-            }); 
+
+            //Check URL with circuit breaker e efetua a requisição
+            checkURL(res, url)
+            launch(url, res, music);            
         }
-
-
+                
+      });
         //TODO salvar letra, artista e musica
         //getAll(res);
-    });
+
 
     //Rota para recuperação de dados de uma letra específica
     app.get(`${baseURL}/:id`, cors('/'), (req, res) => {
@@ -90,6 +85,35 @@ module.exports = function(app, dao) {
         res.json({mensagem: msg});
     });
 };
+
+
+circuit.fallback(() => Promise.resolve({
+    error: 'MusixMatch não está acessível. Tente mais tarde'
+}));
+
+
+function checkURL (resp, url) {
+    return circuit.fire({
+        endpoint: url
+    })
+    .then((message) => resp.send(message))
+    .catch((err)  => resp.send(err))
+}
+
+function launch(url, res, music) {
+    request(url, { json: true }, (err, res_int, body) => {        
+        if (err) { return console.error(err); }
+            if(body.message.body.lyrics==null)
+            {
+                res.send({ erro: 'Nenhuma letra encontrada' });
+            } else {
+                const fromLyric = body.message.body.lyrics.lyrics_body;
+                console.log(`Salvando letra`)
+                queries.create(music, fromLyric);
+                res.send({letra: fromLyric});            
+            }
+        }); 
+}
 
 function getLyricData(req) {
     return { nome: req.body.nome, pais: req.body.pais };
@@ -132,3 +156,4 @@ function getAll(res) {
         }
         });
 }
+
