@@ -1,0 +1,1223 @@
+{
+	"info": {
+		"_postman_id": "7d7e237f-24cc-433a-b81e-58dd1f00b8b7",
+		"name": "Music Management API",
+		"description": "API para cadastro/gerenciamento de veículos.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Limpa variáveis",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9abdb3e7-4446-455f-928f-0dd20375b2dd",
+						"exec": [
+							"pm.globals.clear()"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "HEAD",
+				"header": [],
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cria Artista",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5e356dcb-b59f-47c0-b08b-dea00dd93281",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"var id = jsonData.id;",
+							"pm.globals.set(\"idArtista\", id);",
+							"",
+							"pm.test(\"Artista criado com sucesso!\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"nome\": \"Walter Coelho\",\n    \"pais\": \"Brasil\"\n}"
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/artistas",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"artistas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cria Letra",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5e356dcb-b59f-47c0-b08b-dea00dd93281",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"var id = jsonData.id;",
+							"pm.globals.set(\"idLetra\", id);",
+							"",
+							"pm.test(\"Letra criada com sucesso!\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"titulo\": \"Minha musica com letra\",\n    \"letra\": \"Esta é a letra da música\"\n}"
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/letras",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"letras"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cria Música",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5e356dcb-b59f-47c0-b08b-dea00dd93281",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"var id = jsonData.id;",
+							"pm.globals.set(\"idMusica\", id);",
+							"",
+							"pm.test(\"Música criada com sucesso!\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"titulo\": \"Minha musica\",\n        \"idArtista\": {{idArtista}},  \n        \"idLetra\": {{idLetra}}\n}"
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/musicas",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"musicas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recupera Lista de Artistas",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0e7e7877-0db3-4f45-94f6-144d6a61dd53",
+						"exec": [
+							"pm.test(\"Artista(s) encontrado(s) ou lista vazia\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/artistas",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"artistas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recupera Artista Específico",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "add78b98-2bf5-4f53-8f46-7b521666140b",
+						"exec": [
+							"pm.test(\"Artista encontrado!\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/artistas/{{idArtista}}",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"artistas",
+						"{{idArtista}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recupera Lista de Letras",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0e7e7877-0db3-4f45-94f6-144d6a61dd53",
+						"exec": [
+							"pm.test(\"Letra(s) encontrada(s) ou lista vazia\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/letras",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"letras"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recupera Letra Específica",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0e7e7877-0db3-4f45-94f6-144d6a61dd53",
+						"exec": [
+							"pm.test(\"Usuário(s) encontrado(s) ou lista vazia\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/letras/{{idLetra}}",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"letras",
+						"{{idLetra}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recupera Letra a partir do MusixMatch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0e7e7877-0db3-4f45-94f6-144d6a61dd53",
+						"exec": [
+							"pm.test(\"Usuário(s) encontrado(s) ou lista vazia\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/letras/?titulo=kiss me quick&artista=elvis presley",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"letras",
+						""
+					],
+					"query": [
+						{
+							"key": "titulo",
+							"value": "kiss me quick"
+						},
+						{
+							"key": "artista",
+							"value": "elvis presley"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recupera Lista de Músicas",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0e7e7877-0db3-4f45-94f6-144d6a61dd53",
+						"exec": [
+							"pm.test(\"Música(s) encontrada(s) ou lista vazia\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/musicas",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"musicas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recupera Música Específica",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0e7e7877-0db3-4f45-94f6-144d6a61dd53",
+						"exec": [
+							"pm.test(\"Música(s) encontrada(s) ou lista vazia\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/musicas/{{idMusica}}",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"musicas",
+						"{{idMusica}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recupera Lista de Playlists do Usuário",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0e7e7877-0db3-4f45-94f6-144d6a61dd53",
+						"exec": [
+							"pm.test(\"Playlist(s) encontrada(s) ou lista vazia\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/playlists",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"playlists"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recupera Playlist do Usuário a partir do Spotify (precisa de token)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0e7e7877-0db3-4f45-94f6-144d6a61dd53",
+						"exec": [
+							"pm.test(\"Playlist(s) encontrada(s) ou lista vazia\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/playlists/?token=",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"playlists",
+						""
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recupera Música a Partir do Spotify (precisa token)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0e7e7877-0db3-4f45-94f6-144d6a61dd53",
+						"exec": [
+							"pm.test(\"Música(s) encontrada(s) ou lista vazia\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/musicas/?titulo=kiss me quick&artista=elvis presley&token=",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"musicas",
+						""
+					],
+					"query": [
+						{
+							"key": "titulo",
+							"value": "kiss me quick"
+						},
+						{
+							"key": "artista",
+							"value": "elvis presley"
+						},
+						{
+							"key": "token",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recupera Música a Partir do Spotify com Token inválido",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0e7e7877-0db3-4f45-94f6-144d6a61dd53",
+						"exec": [
+							"pm.test(\"Música(s) encontrada(s) ou lista vazia\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/musicas/?titulo=kiss me quick&artista=elvis presley&token=123456",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"musicas",
+						""
+					],
+					"query": [
+						{
+							"key": "titulo",
+							"value": "kiss me quick"
+						},
+						{
+							"key": "artista",
+							"value": "elvis presley"
+						},
+						{
+							"key": "token",
+							"value": "123456"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recupera Artista com Id inválido - retorna \"400 Not Found\"",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3f256802-a20c-4f0f-9ca9-466177d0025f",
+						"exec": [
+							"pm.test(\"Usuário não encontrado!\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([404]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/artistas/idInvalido",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"artistas",
+						"idInvalido"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recupera Letra com Id inválido - retorna \"400 Not Found\"",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3f256802-a20c-4f0f-9ca9-466177d0025f",
+						"exec": [
+							"pm.test(\"Usuário não encontrado!\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([404]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/letras/idInvalido",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"letras",
+						"idInvalido"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recupera Música com Id inválido - retorna \"400 Not Found\"",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3f256802-a20c-4f0f-9ca9-466177d0025f",
+						"exec": [
+							"pm.test(\"Usuário não encontrado!\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([404]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/musicas/idInvalido",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"musicas",
+						"idInvalido"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualiza dados de Artista",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3208802e-7ab4-412e-9690-c849414adfcc",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"var _result = jsonData.success;",
+							"",
+							"pm.test(\"Dados do Artista atualizados com sucesso!\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"    pm.expect(_result).to.eql(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"nome\": \"Walter Coelho Atualizado\",\n    \"pais\": \"Japão\",\n    \"id\": {{idArtista}}\n}"
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/artistas/{{idArtista}}",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"artistas",
+						"{{idArtista}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualiza dados de Letras",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3208802e-7ab4-412e-9690-c849414adfcc",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"var _result = jsonData.success;",
+							"",
+							"pm.test(\"Dados da Letra atualizados com sucesso!\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"    pm.expect(_result).to.eql(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": {{idLetra}},\n    \"titulo\": \"Minha musica com letra\",\n    \"letra\": \"Esta é a letra da música\"\n}"
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/letras/{{idLetra}}",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"letras",
+						"{{idLetra}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualiza dados de Músicas",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3208802e-7ab4-412e-9690-c849414adfcc",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"var _result = jsonData.success;",
+							"",
+							"pm.test(\"Dados da Letra atualizados com sucesso!\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"    pm.expect(_result).to.eql(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n        \"id\": {{idMusica}},\n        \"titulo\": \"Minha musica alterada\",\n        \"idArtista\": {{idArtista}},\n        \"idLetra\": {{idLetra}}\n    }"
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/musicas/{{idMusica}}",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"musicas",
+						"{{idMusica}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Apaga Artista",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2ff711b3-2e55-4ac3-8258-f4433f0d512c",
+						"exec": [
+							"pm.test(\"Registro do Usuário apagado com sucesso!\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/artistas/{{idArtista}}",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"artistas",
+						"{{idArtista}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Apaga Letra",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2ff711b3-2e55-4ac3-8258-f4433f0d512c",
+						"exec": [
+							"pm.test(\"Registro do Usuário apagado com sucesso!\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/letras/{{idLetra}}",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"letras",
+						"{{idLetra}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Apaga Música",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2ff711b3-2e55-4ac3-8258-f4433f0d512c",
+						"exec": [
+							"pm.test(\"Registro do Usuário apagado com sucesso!\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/musicas/{{idMusica}}",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"musicas",
+						"{{idMusica}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Apaga Artista com id inexistente - retorna sucesso",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f19ef097-ea5d-47d1-863a-e40da1d4004b",
+						"exec": [
+							"pm.test(\"Usuário não encontrado\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/musicas/1000",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"musicas",
+						"1000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Apaga Letra com id inexistente - retorna sucesso",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f19ef097-ea5d-47d1-863a-e40da1d4004b",
+						"exec": [
+							"pm.test(\"Usuário não encontrado\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/musicas/1000",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"musicas",
+						"1000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Apaga Música com id inexistente - retorna sucesso",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f19ef097-ea5d-47d1-863a-e40da1d4004b",
+						"exec": [
+							"pm.test(\"Usuário não encontrado\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://{{ADDRESS}}:{{PORT}}/api/{{API_VERSION}}/musicas/1000",
+					"protocol": "http",
+					"host": [
+						"{{ADDRESS}}"
+					],
+					"port": "{{PORT}}",
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"musicas",
+						"1000"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
