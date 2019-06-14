@@ -7,6 +7,9 @@ npm install
 ## Inicialização
 npm start  
 
+## Testes  
+Postman Collection - pasta Tests  
+
 ## Proteção  
 Circuit Breaker implementado para verificar o acesso ao MusixMatch. 
   
