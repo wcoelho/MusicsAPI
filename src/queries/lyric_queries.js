@@ -48,7 +48,7 @@ class LyricQueries {
 
     getByLyric(lyric) {
       return this.dao.get(
-        `SELECT * FROM letras WHERE letra like '%${lyric}%'`)
+        `SELECT * FROM letras WHERE letra = ?`)
   }
 
     // Recupera lista de todos letras

@@ -56,7 +56,7 @@ class MusicQueries {
 
     // Recupera lista de todos músicas
     getAll() {
-      return this.dao.all(`SELECT * FROM musics`)
+      return this.dao.all(`SELECT * FROM musicas`)
     }
 }
   

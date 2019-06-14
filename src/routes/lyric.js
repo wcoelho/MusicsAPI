@@ -20,8 +20,8 @@ module.exports = function(app, dao) {
     // Rota para adição de letras
     app.post(baseURL, cors(), (req, res) => {
         // As informações da letra serão armazenadas no banco de dados
-        const { nome, pais } = getLyricData(req);
-        queries.create(nome, pais)
+        const { titulo, letra } = getLyricData(req);
+        queries.create(titulo, letra)
         .then((data) => { // Se a operação de criação for bem sucedida, retorna os dados com o id
         let letra = req.body;
         letra.id = data.id;
@@ -37,9 +37,9 @@ module.exports = function(app, dao) {
             res.status(500).json({erro: 'Ocorreu um erro em sua requisição. Consulte o administrador.'});
         } else {
             // As informações da letra serão atualizadas no banco de dados
-            const { nome, pais } = getLyricData(req);
+            const { titulo, letra } = getLyricData(req);
             const id = req.params.id;
-            queries.update(id, nome, pais);
+            queries.update(id, titulo, letra);
 
             // Recupera todos os campos
             getById(id, res);
@@ -116,7 +116,7 @@ function launch(url, res, music) {
 }
 
 function getLyricData(req) {
-    return { nome: req.body.nome, pais: req.body.pais };
+    return { titulo: req.body.titulo, letra: req.body.letra };
 }
 
 function getByLyric(lyric, res) {
